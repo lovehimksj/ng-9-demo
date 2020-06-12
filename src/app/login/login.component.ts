@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/service/user.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
-export class AppComponent {
+export class LoginComponent {
+
   title = 'login-sample';
   loginForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
@@ -15,7 +17,7 @@ export class AppComponent {
     keepMeLogin: new FormControl(true)
   });
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
   }
 
   login(form: FormGroup) {
@@ -25,7 +27,10 @@ export class AppComponent {
     }
     this.userService.loginUser(form.value)
       .subscribe(value => {
-        console.log(value);
+        if (value.status === 200) {
+          this.router.navigate(['', 'admin']);
+        }
       });
   }
+
 }
